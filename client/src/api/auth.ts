@@ -1,10 +1,12 @@
 // src/api/auth.ts
 import axios from "axios";
 
-// ✅ Uses env variable set in Vercel (or .env for local)
 const API = axios.create({
   baseURL: `${import.meta.env.VITE_API_BASE_URL}/auth`,
-  withCredentials: true, // Optional: if you're using cookies
+  headers: {
+    "Content-Type": "application/json", // Required
+  },
+  withCredentials: false, // Set to true only if you use cookies for auth
 });
 
 // POST: Register
@@ -15,5 +17,5 @@ export const registerUser = (data: { username: string; email: string; password: 
 export const loginUser = (data: { email: string; password: string }) =>
   API.post("/login", data);
 
-// GET: Current user (optional, for /me route)
+// (Optional) GET current user if you build a protected route
 export const getCurrentUser = () => API.get("/me");
