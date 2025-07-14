@@ -32,7 +32,7 @@ export default function Dashboard() {
         setUsername(res.data.username);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         toast.error("Session expired. Please log in again.");
         localStorage.removeItem("token");
         navigate("/");
