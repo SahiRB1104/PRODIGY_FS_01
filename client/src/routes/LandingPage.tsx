@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTheme } from "../context/ThemeContext";
 import { FaMoon, FaSun } from "react-icons/fa";
-import ParticlesBackground from "../components/ParticlesBackground";
+// import ParticlesBackground from "../components/ParticlesBackground"; ❌ Temporarily disabled
 import GlassCard from "../components/GlassCard";
 
 export default function LandingPage() {
@@ -19,10 +19,10 @@ export default function LandingPage() {
           : "bg-gradient-to-br from-purple-100 via-pink-50 to-white"
       }`}
     >
-      {/* Particle Layer */}
-      <div className="absolute inset-0 z-0">
+      {/* Particle Layer - Temporarily disabled */}
+      {/* <div className="absolute inset-0 z-0">
         <ParticlesBackground />
-      </div>
+      </div> */}
 
       {/* Dark/Light Mode Toggle */}
       <button
