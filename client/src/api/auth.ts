@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: `${import.meta.env.VITE_API_BASE_URL}/auth`,
+  baseURL: "https://prodigy-fs-01-1bcr.onrender.com/api/auth",
   headers: {
     "Content-Type": "application/json", // Required
   },
