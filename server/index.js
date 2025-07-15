@@ -7,7 +7,7 @@ const app = express();
 
 // ✅ Proper CORS config
 app.use(cors({
-  origin: ["http://localhost:5173", "https://prodigy-fs-01-6f3r.vercel.app"],
+  origin: ["http://localhost:5173", "https://prodigy-fs-01-6f3r-pcrk4a48y-sahils-projects-25b217d6.vercel.app"],
   credentials: true,
 }));
 
