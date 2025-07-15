@@ -1,21 +1,17 @@
-// src/api/auth.ts
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "https://prodigy-fs-01-1bcr.onrender.com/api/auth",
+  baseURL: "/api/auth", // ✅ Let Vercel handle rewriting to Render
   headers: {
-    "Content-Type": "application/json", // Required
+    "Content-Type": "application/json",
   },
-  withCredentials: false, // Set to true only if you use cookies for auth
+  withCredentials: false,
 });
 
-// POST: Register
 export const registerUser = (data: { username: string; email: string; password: string }) =>
   API.post("/register", data);
 
-// POST: Login
 export const loginUser = (data: { email: string; password: string }) =>
   API.post("/login", data);
 
-// (Optional) GET current user if you build a protected route
 export const getCurrentUser = () => API.get("/me");
