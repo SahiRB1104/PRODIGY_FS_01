@@ -7,7 +7,7 @@ const app = express();
 
 // ✅ CORS for both local dev and production
 app.use(cors({
-  origin: ["http://localhost:5173", "https://prodigy-fs-01-eosin.vercel.app"],
+  origin: ["http://localhost:5173", "https://prodigy-fs-01-6f3r.vercel.app"],
   credentials: true,
 }));
 
