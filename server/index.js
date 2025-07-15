@@ -5,18 +5,15 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ Enable CORS from your frontend origin
+// ✅ CORS for both local dev and production
 app.use(cors({
-  origin: "http://localhost:5173", // Vite default port
+  origin: ["http://localhost:5173", "https://prodigy-fs-01-eosin.vercel.app"],
   credentials: true,
 }));
 
 app.use(express.json());
-
-// ✅ Use your auth routes
 app.use("/api/auth", require("./routes/auth"));
 
-// ✅ Connect MongoDB and start server
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     app.listen(process.env.PORT, () =>
