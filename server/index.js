@@ -17,6 +17,10 @@ app.use(express.json());
 // ✅ Auth routes
 app.use("/api/auth", require("./routes/auth"));
 
+app.get("/", (req, res) => {
+  res.send("✅ API is running");
+});
+
 // ✅ Start Mongo + server
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
