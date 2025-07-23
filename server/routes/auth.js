@@ -6,42 +6,58 @@ const User = require("../models/User");
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Register Route
+// ✅ Register Route
 router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
+
+  if (!username || !email || !password) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
   try {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ error: "User already exists" });
+    }
+
     const hashed = await bcrypt.hash(password, 10);
     const newUser = await User.create({ username, email, password: hashed });
-    res.status(201).json({ msg: "User registered" });
+
+    res.status(201).json({ message: "User registered successfully", user: { id: newUser._id, username } });
   } catch (err) {
-    res.status(400).json({ error: "Registration failed" });
+    console.error("Registration error:", err);
+    res.status(500).json({ error: "Registration failed" });
   }
 });
 
-// Login Route
+// ✅ Login Route
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).json({ error: "Email and password required" });
+  }
+
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(400).json({ error: "Invalid credentials" });
+    if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).json({ error: "Invalid credentials" });
+    if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "2h" });
 
-    res.json({
-      token,
-      username: user.username
-    });
+    res.json({ message: "Login successful", token, user: { username: user.username, id: user._id } });
   } catch (err) {
+    console.error("Login error:", err);
     res.status(500).json({ error: "Login error" });
   }
 });
 
-// 🔐 Protected route to fetch user data
+// ✅ Protected Route
 router.get("/me", async (req, res) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const authHeader = req.headers.authorization;
+  const token = authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
 
   if (!token) {
     return res.status(401).json({ error: "No token provided" });
@@ -49,14 +65,15 @@ router.get("/me", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.userId).select("username");
+    const user = await User.findById(decoded.userId).select("username email");
 
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ username: user.username });
+    res.json({ user });
   } catch (err) {
+    console.error("Token validation error:", err);
     res.status(401).json({ error: "Invalid token" });
   }
 });
