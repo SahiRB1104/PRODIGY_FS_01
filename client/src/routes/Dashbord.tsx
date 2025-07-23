@@ -31,7 +31,7 @@ export default function Dashboard() {
         },
       })
       .then((res) => {
-        setUsername(res.data.user.username); // ✅ Access `user.username` correctly
+        setUsername(res.data.username); // ✅ changed this line
         setLoading(false);
       })
       .catch(() => {
@@ -39,6 +39,7 @@ export default function Dashboard() {
         localStorage.removeItem("token");
         navigate("/");
       });
+
   }, [navigate]);
 
   const logout = () => {
