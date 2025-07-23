@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
+const API = import.meta.env.VITE_API_BASE;
 
 export default function Dashboard() {
   const navigate = useNavigate();
@@ -13,6 +14,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   const toggleTheme = () => setDarkMode((prev: boolean) => !prev);
+
+ 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,7 +26,7 @@ export default function Dashboard() {
     }
 
     axios
-      .get("http://localhost:5000/api/auth/me", {
+      .get(`${API}/api/auth/me`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -38,6 +41,7 @@ export default function Dashboard() {
         navigate("/");
       });
   }, []);
+
 
   const logout = () => {
     localStorage.removeItem("token");
