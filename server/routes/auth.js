@@ -65,8 +65,8 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Protected Route
-router.get("/me", async (req, res) => {
+// ✅ Auth Middleware (Recommended: move to middleware/auth.js)
+const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
   const token = authHeader?.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
 
@@ -76,17 +76,26 @@ router.get("/me", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log("Decoded JWT:", decoded); // ✅ Use for debugging
+    req.user = decoded;
+    next();
+  } catch (err) {
+    console.error("Token error:", err);
+    res.status(401).json({ error: "Invalid token" });
+  }
+};
 
-    const user = await User.findById(decoded.userId).select("username email");
+// ✅ Protected Route (/me)
+router.get("/me", authMiddleware, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId).select("username email");
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
     res.status(200).json({ username: user.username, email: user.email });
   } catch (err) {
-    console.error("Token error:", err);
-    res.status(401).json({ error: "Invalid token" });
+    console.error("Fetch user error:", err);
+    res.status(500).json({ error: "Something went wrong" });
   }
 });
 
