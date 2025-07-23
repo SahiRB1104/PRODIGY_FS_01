@@ -5,29 +5,24 @@ require("dotenv").config();
 
 const app = express();
 
-// ✅ Proper CORS Configuration
+// ✅ CORS setup
 app.use(cors({
-  origin: ["http://localhost:5173", "https://prodigy-fs-01-eosin.vercel.app"], // No trailing slash!
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  origin: ["http://localhost:5173", "https://prodigy-fs-01-eosin.vercel.app"],
   credentials: true,
 }));
 
-// ✅ Handle Preflight requests
-app.options("*", cors());
-
-// ✅ Middleware to parse JSON bodies
+// ✅ Middleware
 app.use(express.json());
 
-// ✅ API Route
+// ✅ Auth routes
 app.use("/api/auth", require("./routes/auth"));
 
-// ✅ Health check route
+// ✅ Test route
 app.get("/", (req, res) => {
   res.send("✅ API is running");
 });
 
-// ✅ MongoDB Connection + Server Start
+// ✅ Connect to DB and start server
 mongoose.connect(process.env.MONGO_URI)
   .then(() => {
     app.listen(process.env.PORT, () =>
