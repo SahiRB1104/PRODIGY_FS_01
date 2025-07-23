@@ -23,7 +23,7 @@ export default function FloatingInput({ label, type, value, onChange, error }: P
         onChange={onChange}
         placeholder=" "
         required
-        className="peer w-full px-4 py-3 pr-10 bg-white/90 dark:bg-white/10 text-black dark:text-white border border-gray-300 dark:border-white/20 rounded-md focus:outline-none focus:text-black dark:focus:text-black focus:ring-2 focus:ring-purple-400 transition placeholder-transparent"
+        className="peer w-full px-4 py-3 pr-10 bg-white/90 dark:bg-white/10 text-black dark:text-black border border-gray-300 dark:border-white/20 rounded-md focus:outline-none focus:text-black dark:focus:text-black focus:ring-2 focus:ring-purple-400 transition placeholder-transparent"
       />
       <label
         className={`
