@@ -5,6 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
+
 const API = "https://prodigy-fs-01-1bcr.onrender.com";
 
 export default function Dashboard() {
@@ -14,8 +15,6 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   const toggleTheme = () => setDarkMode((prev: boolean) => !prev);
-
- 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -32,7 +31,7 @@ export default function Dashboard() {
         },
       })
       .then((res) => {
-        setUsername(res.data.username);
+        setUsername(res.data.user.username); // ✅ Access `user.username` correctly
         setLoading(false);
       })
       .catch(() => {
@@ -40,8 +39,7 @@ export default function Dashboard() {
         localStorage.removeItem("token");
         navigate("/");
       });
-  }, []);
-
+  }, [navigate]);
 
   const logout = () => {
     localStorage.removeItem("token");
