@@ -1,8 +1,5 @@
 {
   "rewrites": [
-    {
-      "source": "/api/:path*",
-      "destination": "https://prodigy-fs-01-1bcr.onrender.com/api/:path*"
-    }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
