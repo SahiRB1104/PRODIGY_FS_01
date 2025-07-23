@@ -23,7 +23,10 @@ router.post("/register", async (req, res) => {
     const hashed = await bcrypt.hash(password, 10);
     const newUser = await User.create({ username, email, password: hashed });
 
-    res.status(201).json({ message: "User registered successfully", user: { id: newUser._id, username } });
+    res.status(201).json({
+      message: "User registered successfully",
+      user: { id: newUser._id, username: newUser.username },
+    });
   } catch (err) {
     console.error("Registration error:", err);
     res.status(500).json({ error: "Registration failed" });
@@ -40,17 +43,25 @@ router.post("/login", async (req, res) => {
 
   try {
     const user = await User.findOne({ email });
-    if (!user) return res.status(401).json({ error: "Invalid credentials" });
+    if (!user) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
+    if (!isMatch) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "2h" });
 
-    res.json({ message: "Login successful", token, user: { username: user.username, id: user._id } });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: { id: user._id, username: user.username },
+    });
   } catch (err) {
     console.error("Login error:", err);
-    res.status(500).json({ error: "Login error" });
+    res.status(500).json({ error: "Login failed" });
   }
 });
 
@@ -65,15 +76,16 @@ router.get("/me", async (req, res) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    const user = await User.findById(decoded.userId).select("username email");
+    console.log("Decoded JWT:", decoded); // ✅ Use for debugging
 
+    const user = await User.findById(decoded.userId).select("username email");
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.json({ user });
+    res.status(200).json({ username: user.username, email: user.email });
   } catch (err) {
-    console.error("Token validation error:", err);
+    console.error("Token error:", err);
     res.status(401).json({ error: "Invalid token" });
   }
 });
