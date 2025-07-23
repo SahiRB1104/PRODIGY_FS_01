@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "/api/auth", // ✅ Let Vercel handle rewriting to Render
+  baseURL: import.meta.env.VITE_API_BASE_URL, // ✅ Let Vercel handle rewriting to Render
   headers: {
     "Content-Type": "application/json",
   },
