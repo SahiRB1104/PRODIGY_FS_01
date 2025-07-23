@@ -5,7 +5,7 @@ import { toast, ToastContainer } from "react-toastify";
 import { FaSun, FaMoon } from "react-icons/fa";
 import { useTheme } from "../context/ThemeContext";
 import axios from "axios";
-const API = import.meta.env.VITE_API_BASE;
+const API = "https://prodigy-fs-01-1bcr.onrender.com";
 
 export default function Dashboard() {
   const navigate = useNavigate();
